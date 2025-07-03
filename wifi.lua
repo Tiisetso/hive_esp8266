@@ -146,6 +146,9 @@
 ----
 
 -- 1) Wi-Fi + LED setup
+
+-- local data = {}
+
 wifi.setmode(wifi.STATION)
 
 local red, green, blue = 4, 5, 6
@@ -224,3 +227,5 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
     end
   )
 end)
+
+-- return data
