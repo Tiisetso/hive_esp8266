@@ -76,7 +76,7 @@ local arrivals = M.get_num_values(json, "realtimeArrival")
 
 
 disp:clearBuffer()
-disp:setFont(u8g2.font_9x15_tf)
+disp:setFont(u8g2.font_6x10_tf)
 disp:drawStr(0, 16, "Next Buses:")
 
 if #arrivals == 0 then
@@ -86,7 +86,7 @@ else
   for i = 1, math.min(3, #arrivals) do
     local msg = "In: " .. arrivals[i] .. " sec"
     disp:drawStr(0, y, msg)
-    y = y + 16
+    y = y + 10
   end
 end
 
