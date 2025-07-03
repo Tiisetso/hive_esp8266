@@ -36,11 +36,11 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
       local tt = rtctime.epoch2cal(sec)
 
       local day = tonumber(tt.day) or 0
-      local hour = tonumber(tt.hour) or 0
+      local hour = tonumber(tt.hour) + 3 or 0
       local min = tonumber(tt.min) or 0
       local sec = tonumber(tt.sec) or 0
 
-      print(string.format("Time: %02d %02d:%02d:%02d", day, hour, min, sec))
+      print(string.format("Day of month and Time: %02d %02d:%02d:%02d", day, hour, min, sec))
     end,
     function()
       print("NTP sync failed")
