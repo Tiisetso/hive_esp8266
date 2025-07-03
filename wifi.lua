@@ -32,15 +32,15 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
   
   sntp.sync("pool.ntp.org",
     function(sec, usec, server)
-      print("SNTP sec:", sec)
-      if sec and sec > 0 then
-        rtctime.set(sec, usec)
-        local tt = rtctime.epoch2cal(sec)
-        print(string.format("Time: %04d-%02d-%02d %02d:%02d:%02d",
-          tt.year, tt.month, tt.day, tt.hour, tt.min, tt.sec))
-      else
-        print("Invalid SNTP time received")
-      end
+      rtctime.set(sec, usec)  -- set internal RTC time
+      local tt = rtctime.epoch2cal(sec)
+
+      local day = tonumber(tt.day) or 0
+      local hour = tonumber(tt.hour) or 0
+      local min = tonumber(tt.min) or 0
+      local sec = tonumber(tt.sec) or 0
+
+      print(string.format("Time: %02d %02d:%02d:%02d", day, hour, min, sec))
     end,
     function()
       print("NTP sync failed")
