@@ -29,8 +29,8 @@ local sample = [[
 {
   "stopId":"HSL:1100911",
   "etas":[
-    { "route":"23", "realtimeArrival":"1678833600", "scheduledArrival":"1678833660" },
-    { "route":"42", "realtimeArrival":"1678837200", "scheduledArrival":"1678837260" }
+    { "route":"23", "realtimeArrival":"52792", "scheduledArrival":"1678833660" },
+    { "route":"42", "realtimeArrival":"52792", "scheduledArrival":"1678837260" }
   ],
   "name":"Mannerheimintie 20"
 }
