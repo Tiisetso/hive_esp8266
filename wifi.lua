@@ -1,25 +1,38 @@
--- 1) Set Wi-Fi to station mode (i.e. client, not AP)
 wifi.setmode(wifi.STATION)
 
--- 2) Configure your SSID and password
---    (replace YOUR_SSID and YOUR_PASS with your network’s credentials)
+local red = 1
+local green = 2
+local blue = 3
+
+gpio.mode(red, gpio.OUTPUT)
+gpio.mode(green, gpio.OUTPUT)
+gpio.mode(blue, gpio.OUTPUT)
+
+
 wifi.sta.config{
   ssid = "Hive Stud",
   pwd  = "shifterambiancefinlesskilt",
-  -- optional: auto-connect on boot
   auto = true
 }
 
--- 3) Trigger the connection (optional—auto=true already does this)
 wifi.sta.connect()
 
--- 4) Wait for an IP and print it
 tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
   local ip = wifi.sta.getip()
   if ip then
     print("Connected! IP address:", ip)
-    t:unregister()  -- stop the timer
+	gpio.write(red, gpio.HIGH)
+	gpio.write(green, gpio.HIGH)
+	gpio.write(blue, gpio.LOW)
+	tmr.delay(10000)
+	gpio.write(red, gpio.HIGH)
+	gpio.write(green, gpio.HIGH)
+	gpio.write(blue, gpio.HIGH)
+    t:unregister()
   else
     print("Waiting for IP…")
+	gpio.write(red, gpio.LOW)
+	gpio.write(green, gpio.HIGH)
+	gpio.write(blue, gpio.HIGH)
   end
 end)
