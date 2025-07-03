@@ -1,1 +1,1 @@
-dofile("blink.lua")
+dofile("rainbow.lua")
