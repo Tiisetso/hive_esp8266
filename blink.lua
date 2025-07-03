@@ -1,7 +1,7 @@
 
-local red = 1
-local green = 2
-local blue = 3
+local red = 5
+local green = 6
+local blue = 7
 
 gpio.mode(red, gpio.OUTPUT)
 gpio.mode(green, gpio.OUTPUT)
