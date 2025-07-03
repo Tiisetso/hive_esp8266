@@ -30,17 +30,29 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
 	gpio.write(blue, gpio.HIGH)
     t:unregister()
   
-  sntp.sync("pool.ntp.org",
+sntp.sync("pool.ntp.org",
   function(sec, usec, server)
     rtctime.set(sec, usec)  -- set internal RTC time
-    local tt = rtctime.epoch2cal(sec) -- convert to calendar time table
+    local tt = rtctime.epoch2cal(sec)
+    
+    -- Debug print
+    print("epoch2cal result:", tt)
+
+    -- Use or fallback to 0 for all fields if nil
+    local year = tt.year or 0
+    local month = tt.month or 0
+    local day = tt.day or 0
+    local hour = tt.hour or 0
+    local min = tt.min or 0
+    local sec = tt.sec or 0
+
     print(string.format("Time: %04d-%02d-%02d %02d:%02d:%02d",
-      tt.year, tt.month, tt.day, tt.hour, tt.min, tt.sec))
-    end,
-    function()
-      print("NTP sync failed")
-    end
-  )
+      year, month, day, hour, min, sec))
+  end,
+  function()
+    print("NTP sync failed")
+  end
+)
   
   else
     print("Waiting for IP…")
