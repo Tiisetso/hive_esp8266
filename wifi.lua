@@ -31,13 +31,16 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
     t:unregister()
   
   sntp.sync("pool.ntp.org",
-      function(sec, usec, server)
-        print("NTP sync succeeded, time is: " .. os.date('%Y-%m-%d %H:%M:%S', sec))
-      end,
-      function()
-        print("NTP sync failed")
-      end
-    )
+  function(sec, usec, server)
+    rtctime.set(sec, usec)  -- set internal RTC time
+    local tt = rtctime.epoch2cal(sec) -- convert to calendar time table
+    print(string.format("Time: %04d-%02d-%02d %02d:%02d:%02d",
+      tt.year, tt.month, tt.day, tt.hour, tt.min, tt.sec))
+    end,
+    function()
+      print("NTP sync failed")
+    end
+  )
   
   else
     print("Waiting for IP…")
