@@ -1,10 +1,9 @@
 PORT := /dev/cu.wchusbserial140
 BAUD := 115200
 
-FIRMWARE  := firmware/nodemcu-release-16-modules-2025-07-03-13-37-07-float.bin
+FIRMWARE  := firmware/nodemcu-release-17-modules-2025-07-03-14-55-19-float.bin
 
-LUA_DIR := upload
-LUA := $(wildcard $(LUA_DIR)/*.lua)
+LUA := $(wildcard *.lua)
 
 .PHONY: all upload clean rm-init rm-all restart console help flash
 
@@ -22,7 +21,7 @@ rm-init:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove init.lua
 
 fclean:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *.lua
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
 
 flash:
