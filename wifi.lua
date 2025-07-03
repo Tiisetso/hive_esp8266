@@ -29,6 +29,16 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
 	gpio.write(green, gpio.HIGH)
 	gpio.write(blue, gpio.HIGH)
     t:unregister()
+  
+  sntp.sync("pool.ntp.org",
+      function(sec, usec, server)
+        print("NTP sync succeeded, time is: " .. os.date('%Y-%m-%d %H:%M:%S', sec))
+      end,
+      function()
+        print("NTP sync failed")
+      end
+    )
+  
   else
     print("Waiting for IP…")
 	gpio.write(red, gpio.LOW)
