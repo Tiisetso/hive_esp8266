@@ -1,11 +1,7 @@
+require("led")
 local P = require("parse")
 
 wifi.setmode(wifi.STATION)
-
-local red, green, blue = 5, 6, 7
-gpio.mode(red, gpio.OUTPUT)
-gpio.mode(green, gpio.OUTPUT)
-gpio.mode(blue, gpio.OUTPUT)
 
 wifi.sta.config{
   ssid = "Hive Stud",
@@ -18,12 +14,12 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
   local ip = wifi.sta.getip()
   if not ip then
     print("Waiting for IP…")
-    gpio.write(red, gpio.LOW)
+    led(0, 1023, 1023)
     return
 end
 
 t:unregister()
-gpio.write(red, gpio.HIGH)
+led(1023, 0, 1023)
   print("Connected! IP address:", ip)
 
 sntp.sync("pool.ntp.org",

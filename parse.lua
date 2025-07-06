@@ -2,7 +2,7 @@
 local P = {}
 
 --- Returns array of digit values after each search_term  in a given string
-function P.get_num_values(json_text, search_term)
+function P.get_values(json_text, search_term)
   local value = {}
   local pattern = '"' .. search_term .. '"%s*:%s*"?(%d+)"?'
   for num in json_text:gmatch(pattern) do
@@ -12,8 +12,8 @@ function P.get_num_values(json_text, search_term)
 end
 
 
-function P.time(sec_from_midnight)
-  local now = rtctime.get()
+function P.to_minutes(sec_from_midnight)
+  local now = rtctime.get() + 3 * 3600 --UTC to HEL
   if not now then
     return "?"  -- RTC not synced
   end
@@ -23,13 +23,13 @@ function P.time(sec_from_midnight)
   local delta = sec_from_midnight - current_sec
 
   if delta < 0 then
-    return "0"  -- Bus has already arrived
+    return "0"  -- Bus arrived
   else
     return tostring(math.floor(delta / 60))
   end
 end
 
-
+--display bus no, headsign up to 14 chars, and minutes (21chars width)
 function P.arrival_display(json)
   local id  = 0
   local sda = 2
@@ -40,9 +40,9 @@ function P.arrival_display(json)
   local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
 
   local now = rtctime.get()
-  print("Time rtc: ", now)--debug
-  local arrivals = P.get_num_values(json, "realtimeArrival")
-  local busses = P.get_num_values(json, "shortName")
+  local arrivals = P.get_values(json, "realtimeArrival")
+  local busses = P.get_values(json, "shortName")
+  local headsigns = P.get_values(json, "headsign")
 
   disp:clearBuffer()
   disp:setFont(u8g2.font_6x10_tf)
@@ -53,13 +53,13 @@ function P.arrival_display(json)
   else
     local y = 36
     for i = 1, math.min(3, #arrivals) do
-      local msg = busses[i] .. " in " .. P.time(arrivals[i]) .. " minutes"
+      local msg = busses[i] .. "  " .. headsigns[i] .. "  " .. P.to_minutes(arrivals[i])
       disp:drawStr(0, y, msg)
       y = y + 10
     end
   end
-
   disp:sendBuffer()
+  collectgarbage()
 end
 return P
 

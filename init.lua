@@ -18,7 +18,7 @@ tmr.create():alarm(IDLE_AT_STARTUP_MS, tmr.ALARM_SINGLE,function()
 	{r=0, g=0, b=0}, -- white (half-brightness)
 	{r=768, g=768, b=768}, -- white (half-brightness)
 	{r=100, g=700,   b=200},
-	{r=1023,   g=1023,   b=1023},   -- off
+	-- {r=1023,   g=1023,   b=1023},   -- off
 	}
 
 	local idx = 1
