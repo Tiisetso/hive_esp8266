@@ -1,6 +1,33 @@
 -- Module table
 local P = {}
 
+function pad_right(str, len, char)
+  char = char or " "
+  return str .. string.rep(char, math.max(0, len - #str))
+end
+
+function pad_left(str, len, char)
+  char = char or " "
+  return string.rep(char, math.max(0, len - #str)) .. str
+end
+
+function P.to_mins(sec_from_midnight)
+  local now = rtctime.get() + 3 * 3600 --UTC to HEL
+  if not now then
+    return "?"  -- RTC not synced
+  end
+  
+  local cal = rtctime.epoch2cal(now)
+  local current_sec = cal.hour * 3600 + cal.min * 60 + cal.sec
+  local delta = sec_from_midnight - current_sec
+
+  if delta < 0 then
+    return "0"  -- Bus arrived
+  else
+    return tostring(math.floor(delta / 60))
+  end
+end
+
 function P.get_values(json_text, search_term)
   local values = {}
   -- Pattern explanation:
@@ -15,24 +42,7 @@ function P.get_values(json_text, search_term)
   return values
 end
 
-function P.to_min(sec_from_midnight)
-  local now = rtctime.get() + 3 * 3600 --UTC to HEL
-  if not now then
-    return "?"  -- RTC not synced
-  end
-
-  local cal = rtctime.epoch2cal(now)
-  local current_sec = cal.hour * 3600 + cal.min * 60 + cal.sec
-  local delta = sec_from_midnight - current_sec
-
-  if delta < 0 then
-    return "0"  -- Bus arrived
-  else
-    return tostring(math.floor(delta / 60))
-  end
-end
-
---display bus num, headsign, and minutes (max width <=21chars)
+--display bus number, headsign, and minutes (max display width <=21chars)
 function P.arrival_display(json)
   local id, sda, scl, sla = 0, 2, 1, 0x3C
 
@@ -53,9 +63,11 @@ function P.arrival_display(json)
   else
     local y = 36
     for i = 1, math.min(3, #times) do
-		  local headsign = headsigns[i] or "?"
-      local max_char = 14
-      local msg = busses[i] .. " " .. string.sub(headsign, 1, max_char) .. " " .. P.to_min(times[i])
+      local bus = pad_right((busses[i] or "?"), 5) --last num in padding tells width
+		  local headsign = pad_right(string.sub((headsigns[i] or "unknown"), 1, 11), 11)
+      local time_until = pad_left(P.to_mins(times[i] or "?"), 3)
+
+      local msg = bus .. " " .. headsign .. " " .. time_until
       disp:drawStr(0, y, msg)
       y = y + 10
     end
