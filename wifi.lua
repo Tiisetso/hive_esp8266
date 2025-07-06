@@ -1,6 +1,8 @@
+require("parse")
+
 wifi.setmode(wifi.STATION)
 
-local red, green, blue = 4, 5, 6
+local red, green, blue = 5, 6, 7
 gpio.mode(red, gpio.OUTPUT)
 gpio.mode(green, gpio.OUTPUT)
 gpio.mode(blue, gpio.OUTPUT)
@@ -58,6 +60,7 @@ function(sec,usec,server)
 	  else
 		print("Status:",code)
 		print("Response:",data)
+		P.get_num_values(data, "realtimeArrival")
 	  end
 	end
   )
