@@ -1,17 +1,21 @@
-PORT := /dev/cu.wchusbserial140
+PORT := /dev/cu.wchusbserial130
 BAUD := 115200
 
 FIRMWARE  := firmware/nodemcu-release-17-modules-2025-07-03-14-55-19-float.bin
 
 LUA := $(wildcard *.lua)
+GQL := $(wildcard *.gql)
+FILES := $(LUA) $(GQL)
 
 .PHONY: all upload clean rm-init rm-all restart console help flash
 
-all: help
+all: re
+
+where:
+	ls /dev/cu.* /dev/tty.* 
 
 upload: 
-	@echo "Uploading from $(LUA_DIR):"
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(LUA)
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(FILES)
 
 upload-c: 
 	@echo "Compiling & uploading: $(LUA)"
@@ -30,7 +34,7 @@ flash:
 
 re:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(LUA)
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(FILES)
 
 ls:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
@@ -40,12 +44,3 @@ restart:
 
 terminal:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) terminal
-
-help:
-	@echo "Usage:"
-	@echo "  make upload      — upload all .lua files"
-	@echo "  make upload-c    — compile & upload all .lua files"
-	@echo "  make rm-init     — delete init.lua"
-	@echo "  make rm-all      — delete everything"
-	@echo "  make restart     — soft‐reset the ESP"
-	@echo "  make console     — open serial console"

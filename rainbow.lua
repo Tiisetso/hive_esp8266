@@ -1,5 +1,5 @@
 -- Pin defs (GPIO numbers)
-local PIN_R, PIN_G, PIN_B = 1, 2, 3
+local PIN_R, PIN_G, PIN_B = 5, 6, 7
 
 -- PWM init: 500 Hz, start at 0 duty
 for _, pin in ipairs{PIN_R,PIN_G,PIN_B} do

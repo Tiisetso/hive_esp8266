@@ -1,0 +1,15 @@
+query StopDetails($stopId: String!) {
+  stop(id: $stopId) {
+    id
+    name
+    stoptimesWithoutPatterns {
+      realtimeArrival
+      headsign
+      trip {
+        route {
+          shortName
+        }
+      }
+    }
+  }
+}
