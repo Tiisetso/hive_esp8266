@@ -42,7 +42,7 @@ function P.arrival_display(json)
   local now = rtctime.get()
   local arrivals = P.get_values(json, "realtimeArrival")
   local busses = P.get_values(json, "shortName")
-  local headsigns = P.get_values(json, "headsign")
+  local headsigns = P.get_values(json, "headsign") or "?"
 
   disp:clearBuffer()
   disp:setFont(u8g2.font_6x10_tf)
