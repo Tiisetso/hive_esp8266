@@ -14,12 +14,12 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
   local ip = wifi.sta.getip()
   if not ip then
     print("Waiting for IP…")
-    led(0, 1023, 1023)
+    led(512, 1023, 1023)
     return
 end
 
 t:unregister()
-led(1023, 0, 1023)
+led(512, 1023, 512)
   print("Connected! IP address:", ip)
 
 sntp.sync("pool.ntp.org",

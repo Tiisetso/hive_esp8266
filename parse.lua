@@ -53,7 +53,8 @@ function P.arrival_display(json)
   else
     local y = 36
     for i = 1, math.min(3, #arrivals) do
-      local msg = busses[i] .. "  " .. headsigns[i] .. "  " .. P.to_minutes(arrivals[i])
+		local headsign = headsigns[i] or "?"
+      local msg = busses[i] .. "  " .. headsign .. "  " .. P.to_minutes(arrivals[i])
       disp:drawStr(0, y, msg)
       y = y + 10
     end
@@ -62,6 +63,3 @@ function P.arrival_display(json)
   collectgarbage()
 end
 return P
-
--- Status:	200
--- Response:	{"data":{"stop":{"id":"U3RvcDpIU0w6MTExMjEyNg","name":"Haapaniemi","stoptimesWithoutPatterns":[{"realtimeArrival":59191,"headsign":"Rautatientori","trip":{"route":{"shortName":"78"}}},{"realtimeArrival":59257,"headsign":"Rautatientori","trip":{"route":{"shortName":"66"}}},{"realtimeArrival":59250,"headsign":"Rautatientori","trip":{"route":{"shortName":"75"}}},{"realtimeArrival":59283,"headsign":"Rautatientori","trip":{"route":{"shortName":"611"}}},{"realtimeArrival":59335,"headsign":"Rautatientori","trip":{"route":{"shortName":"77"}}}]}}}
