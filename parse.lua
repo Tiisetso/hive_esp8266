@@ -16,10 +16,10 @@ end
 function P.arrival_printing(json_text)
   local max = 3
   
-  local arrivals = M.get_num_values(json_text, "realtimeArrival")
+  local arrivals = P.get_num_values(json_text, "realtimeArrival")
   --we want the realtime ideally but it may not be there
   if #arrivals == 0 then
-    arrivals = M.get_num_values(json_text, "scheduledArrival")
+    arrivals = P.get_num_values(json_text, "scheduledArrival")
     if #arrivals == 0 then
       print("No arrivals.")
     end
@@ -38,15 +38,13 @@ function P.arrival_printing(json_text)
 
 end
 
----------------------- TEST with example json ------------------------
 
-
-id  = 0
-sda = 2
-scl = 1
-sla = 0x3C
 
 function P.arrival_display(json)
+  id  = 0
+  sda = 2
+  scl = 1
+  sla = 0x3C
   local u8g2 = require("u8g2")
   -- local parse = require("parse")
   i2c.setup(id, sda, scl, i2c.SLOW)
@@ -55,7 +53,7 @@ function P.arrival_display(json)
   -- local json = require("data")
   -- json = data
 
-  local arrivals = M.get_num_values(json, "realtimeArrival")
+  local arrivals = P.get_num_values(json, "realtimeArrival")
 
 
   disp:clearBuffer()
