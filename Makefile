@@ -25,7 +25,7 @@ rm-init:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove init.lua
 
 fclean:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *.lua
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
 
 flash:
@@ -33,7 +33,7 @@ flash:
 	esptool.py --port $(PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE)
 
 re:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove $(FILES)
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(FILES)
 
 ls:

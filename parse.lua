@@ -74,3 +74,6 @@ function P.arrival_display(json)
   disp:sendBuffer()
 end
 return P
+
+-- Status:	200
+-- Response:	{"data":{"stop":{"id":"U3RvcDpIU0w6MTExMjEyNg","name":"Haapaniemi","stoptimesWithoutPatterns":[{"realtimeArrival":59191,"headsign":"Rautatientori","trip":{"route":{"shortName":"78"}}},{"realtimeArrival":59257,"headsign":"Rautatientori","trip":{"route":{"shortName":"66"}}},{"realtimeArrival":59250,"headsign":"Rautatientori","trip":{"route":{"shortName":"75"}}},{"realtimeArrival":59283,"headsign":"Rautatientori","trip":{"route":{"shortName":"611"}}},{"realtimeArrival":59335,"headsign":"Rautatientori","trip":{"route":{"shortName":"77"}}}]}}}

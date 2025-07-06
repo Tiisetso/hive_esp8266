@@ -1,4 +1,4 @@
-require("parse")
+local P = require("parse")
 
 wifi.setmode(wifi.STATION)
 
@@ -19,20 +19,12 @@ tmr.create():alarm(1000, tmr.ALARM_AUTO, function(t)
   if not ip then
     print("Waiting for IP…")
     gpio.write(red, gpio.LOW)
-    gpio.write(green, gpio.HIGH)
-    gpio.write(blue, gpio.HIGH)
     return
-  end
+end
 
-  t:unregister()
+t:unregister()
+gpio.write(red, gpio.HIGH)
   print("Connected! IP address:", ip)
-  gpio.write(red, gpio.HIGH)
-  gpio.write(green, gpio.HIGH)
-  gpio.write(blue, gpio.LOW)
-  tmr.delay(30000)
-  gpio.write(red, gpio.HIGH)
-  gpio.write(green, gpio.HIGH)
-  gpio.write(blue, gpio.HIGH)
 
 sntp.sync("pool.ntp.org",
 function(sec,usec,server)
@@ -48,7 +40,7 @@ function(sec,usec,server)
 	query     = q,
 	variables = { stopId = "HSL:1112126" }
   })
-
+  collectgarbage()
   http.post(
 	"https://api.digitransit.fi/routing/v2/hsl/gtfs/v1",
 	"Content-Type: application/json\r\n"..
@@ -60,7 +52,7 @@ function(sec,usec,server)
 	  else
 		print("Status:",code)
 		print("Response:",data)
-		P.get_num_values(data, "realtimeArrival")
+		P.arrival_display(data)
 	  end
 	end
   )
