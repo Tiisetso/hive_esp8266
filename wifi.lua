@@ -38,7 +38,7 @@ function(sec,usec,server)
 
   local payload = sjson.encode({
 	query     = q,
-	variables = { stopId = "HSL:1112126" }
+	variables = { stopId = "HSL:1100125" }
   })
   collectgarbage()
   http.post(
