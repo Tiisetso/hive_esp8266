@@ -52,14 +52,14 @@ function P.arrival_display(json)
 
   disp:clearBuffer()
   disp:setFont(u8g2.font_6x10_tf)
-  disp:drawStr(0, 16, "Next Buses:")
+  disp:drawUTF8(0, 16, "Next Buses:")
 
   local times = P.get_values(json, "realtimeArrival")
   local busses = P.get_values(json, "shortName")
   local headsigns = P.get_values(json, "headsign")
 
   if #times == 0 then
-    disp:drawStr(0, 36, "No arrivals.")
+    disp:drawUTF8(0, 36, "No arrivals.")
   else
     local y = 36
     for i = 1, math.min(3, #times) do
@@ -68,7 +68,7 @@ function P.arrival_display(json)
       local time_until = pad_left(P.to_mins(times[i] or "?"), 3)
 
       local msg = bus .. " " .. headsign .. " " .. time_until
-      disp:drawStr(0, y, msg)
+      disp:drawUTF8(0, y, msg)
       y = y + 10
     end
   end

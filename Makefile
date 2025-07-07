@@ -29,7 +29,7 @@ fclean:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
 
 flash:
-	@echo "Flashing firmware $(FIRMWARE) to $(PORT)…"
+	@echo "Flashing firmware $(FIRMWARE) to $(PORT)."
 	esptool.py --port $(PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE)
 
 re:
