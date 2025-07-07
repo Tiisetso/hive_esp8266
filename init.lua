@@ -1,7 +1,7 @@
 require("led")
 
 local IDLE_AT_STARTUP_MS = 5000
-local FETCH_INTERVAL_MS  = 10 * 1000
+local FETCH_INTERVAL_MS  = 5 * 1000
 
 local sntp = require("sntp")
 local hsl  = require("hsl")

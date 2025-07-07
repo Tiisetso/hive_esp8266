@@ -49,9 +49,27 @@ function P.get_values(json_text, search_term)
   return values
 end
 
---takes in json response and parses all key values, returns array of lines for displaying 
-function P.parse_arrivals(json)
-  local strings = {}
+--display bus number, headsign, and minutes (max display width <=21chars)
+local id, sda, scl, sla = 0, 2, 1, 0x3C
+local u8g2 = require("u8g2")
+i2c.setup(id, sda, scl, i2c.SLOW)
+local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
+function P.arrival_display(json)
+
+  disp:clearBuffer()
+  disp:setFont(u8g2.font_6x10_tf)
+  -- -- 2) Inverted text: draw white box, then “erase” text
+  disp:setDrawColor(1)                      -- draw the box in “1” (white)
+  local box_w = 128
+  local box_h = 12
+  disp:drawBox(0, 0, box_w, box_h)         -- position box at top left
+
+  local station_name = "Haapaniemi" --max 14 chars (total screen w is 21 chars)
+  local station_type = "Buses"--'Buses' or 'Trams'
+  disp:setDrawColor(0)                      -- 0 = erase pixels (black text)
+  -- disp:sendBuffer()
+  disp:drawUTF8(2, 9, station_name .. " " .. station_type .. ":")--1st num is left padding, 2nd is bottom start edge
+  disp:setDrawColor(1)
 
   local times = P.get_values(json, "realtimeArrival")
   if #times == 0 then 
