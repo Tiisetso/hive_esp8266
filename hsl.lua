@@ -19,6 +19,8 @@ local M = {}
 
 function M.fetch()
   collectgarbage()
+  collectgarbage()
+  
   tmr.create():alarm(200, tmr.ALARM_SINGLE, function()
     http.post(
       "https://api.digitransit.fi/routing/v2/hsl/gtfs/v1",
@@ -32,6 +34,7 @@ function M.fetch()
           print("Status:", code)
           P.arrival_display(data)
         end
+		collectgarbage()
       end
     )
   end)

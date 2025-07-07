@@ -1,7 +1,7 @@
 require("led")
 
 local IDLE_AT_STARTUP_MS = 5000
-local FETCH_INTERVAL_MS  = 20 * 1000
+local FETCH_INTERVAL_MS  = 10 * 1000
 
 local sntp = require("sntp")
 local hsl  = require("hsl")
@@ -11,11 +11,13 @@ local function wait_for_ip(on_ready)
   t:alarm(1000, tmr.ALARM_AUTO, function()
     local ip = wifi.sta.getip()
     if not ip then
-      print("Connecting…"); led(512,1023,1023)
+      print("Connecting…")
+	  led(512, 1023, 1023)
       return
     end
     t:unregister()
-    print("Connected! IP address:", ip); led(512,1023,512)
+    print("Connected! IP address:", ip)
+	led(512, 1023, 512)
     on_ready()
   end)
 end
