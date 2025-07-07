@@ -1,7 +1,8 @@
 PORT := /dev/cu.wchusbserial130
 BAUD := 115200
 
-FIRMWARE  := firmware/nodemcu-release-17-modules-2025-07-03-14-55-19-float.bin
+# FIRMWARE  := firmware/nodemcu-release-17-modules-2025-07-03-14-55-19-float.bin
+FIRMWARE  := firmware/nodemcu-release-14-modules-2025-07-07-14-04-28-float.bin
 
 LUA := $(wildcard *.lua)
 GQL := $(wildcard *.gql)
