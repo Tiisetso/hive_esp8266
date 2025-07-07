@@ -54,16 +54,16 @@ function P.arrival_display(json)
   disp:setFont(u8g2.font_6x10_tf)
   -- -- 2) Inverted text: draw white box, then “erase” text
   disp:setDrawColor(1)                      -- draw the box in “1” (white)
-  local box_w = 64
+  local box_w = 128
   local box_h = 12
-  disp:drawBox(0, 12, box_w, box_h)         -- position box at y=30
+  disp:drawBox(0, 0, box_w, box_h)         -- position box at top left
 
   local station_name = "Haapaniemi" --max 14 chars
   local station_type = "Buses"--'Buses' or 'Trams'
   disp:setDrawColor(0)                      -- 0 = erase pixels (black text)
   -- disp:sendBuffer()
   disp:drawUTF8(2, 11, station_name .. " " .. station_type .. ":")
-
+  disp:setDrawColor(1)
 
   local times = P.get_values(json, "realtimeArrival")
   if #times == 0 then 
@@ -76,10 +76,10 @@ function P.arrival_display(json)
     disp:drawUTF8(0, 36, "No arrivals.")
   else
     local y = 22
-    for i = 1, math.min(4, #times) do
-      local bus = pad_right((busses[i] or "?"), 5) --last num in padding tells width
-		  local headsign = pad_right(string.sub((headsigns[i] or "unknown"), 1, 11), 11)
-      local time_until = pad_left(P.to_mins(times[i] or "?"), 3)
+    for i = 1, math.min(5, #times) do
+      local bus = P.pad_right((busses[i] or "?"), 5) --last num in padding tells width
+		  local headsign = P.pad_right(string.sub((headsigns[i] or "unknown"), 1, 11), 11)
+      local time_until = P.pad_left(P.to_mins(times[i] or "?"), 3)
 
       local msg = bus .. " " .. headsign .. " " .. time_until
       disp:drawUTF8(0, y, msg)
