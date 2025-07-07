@@ -7,7 +7,7 @@ LUA := $(wildcard *.lua)
 GQL := $(wildcard *.gql)
 FILES := $(LUA) $(GQL)
 
-.PHONY: all upload clean rm-init rm-all restart console help flash
+.PHONY: all upload fclean rm-init restart console flash
 
 all: re
 
@@ -19,13 +19,14 @@ upload:
 
 upload-c: 
 	@echo "Compiling & uploading: $(LUA)"
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(GQL)
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload --compile $(LUA)
 
 rm-init:
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove init.lua
 
-fclean:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove *
+format:
+	nodemcu-uploader --port $(PORT) --baud $(BAUD) file format
 	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
 
 flash:
