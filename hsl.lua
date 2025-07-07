@@ -1,7 +1,10 @@
 local P     = require("parse")
 local http  = require("http")
 local sjson = require("sjson")
+local S     = require("screen")
 local tmr   = tmr
+local station_name = "Haapaniemi" --max 14 chars (total screen w is 21 chars)
+local station_type = "Buses"--'Buses' or 'Trams' or empty
 
 local _payload = (function()
   local q = ""
@@ -32,12 +35,17 @@ function M.fetch()
           print("HTTP request failed", code)
         else
           print("Status:", code)
-          P.arrival_display(data)
+          S.display_lines(station_name, station_type, P.parse_arrivals(data))
         end
 		collectgarbage()
       end
     )
   end)
 end
+
+P = nil
+S = nil
+http = nil
+sjson = nil
 
 return M
