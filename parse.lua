@@ -3,12 +3,18 @@ local P = {}
 
 function P.pad_right(str, len, char)
   char = char or " "
-  return str .. string.rep(char, math.max(0, len - #str))
+  return str .. string.rep(char, math.max(0, len - P.utf8len(str)))
 end
 
 function P.pad_left(str, len, char)
   char = char or " "
-  return string.rep(char, math.max(0, len - #str)) .. str
+  return string.rep(char, math.max(0, len - P.utf8len(str))) .. str
+end
+
+--returns len of str in displayable characters
+function P.utf8len(str)
+  local _, count = string.gsub(str, "[^\128-\193]", "")
+  return count
 end
 
 function P.to_mins(sec_from_midnight)
@@ -58,11 +64,11 @@ function P.arrival_display(json)
   local box_h = 12
   disp:drawBox(0, 0, box_w, box_h)         -- position box at top left
 
-  local station_name = "Haapaniemi" --max 14 chars
+  local station_name = "Haapaniemi" --max 14 chars (total screen w is 21 chars)
   local station_type = "Buses"--'Buses' or 'Trams'
   disp:setDrawColor(0)                      -- 0 = erase pixels (black text)
   -- disp:sendBuffer()
-  disp:drawUTF8(2, 11, station_name .. " " .. station_type .. ":")
+  disp:drawUTF8(2, 9, station_name .. " " .. station_type .. ":")--1st num is left padding, 2nd is bottom start edge
   disp:setDrawColor(1)
 
   local times = P.get_values(json, "realtimeArrival")
@@ -78,8 +84,8 @@ function P.arrival_display(json)
     local y = 22
     for i = 1, math.min(5, #times) do
       local bus = P.pad_right((busses[i] or "?"), 5) --last num in padding tells width
-		  local headsign = P.pad_right(string.sub((headsigns[i] or "unknown"), 1, 11), 11)
-      local time_until = P.pad_left(P.to_mins(times[i] or "?"), 3)
+		  local headsign = P.pad_right(string.sub((headsigns[i] or "unknown"), 1, 12), 12)
+      local time_until = P.pad_left(P.to_mins(times[i] or "?"), 2)
 
       local msg = bus .. " " .. headsign .. " " .. time_until
       disp:drawUTF8(0, y, msg)
