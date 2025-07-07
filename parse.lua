@@ -18,10 +18,11 @@ function P.utf8len(str)
 end
 
 function P.to_mins(sec_from_midnight)
-  local now = rtctime.get() + 3 * 3600 --UTC to HEL
-  if not now then
+  local now = rtctime.get()
+  if now == 0 or now == nil then
     return "?"  -- RTC not synced
   end
+  now = now + 3 * 3600 --UTC to HEL
   
   local cal = rtctime.epoch2cal(now)
   local current_sec = cal.hour * 3600 + cal.min * 60 + cal.sec
@@ -54,7 +55,7 @@ function P.parse_arrivals(json)
 
   local times = P.get_values(json, "realtimeArrival")
   if #times == 0 then 
-    P.get_values(json, "scheduledArrivals")
+    times = P.get_values(json, "scheduledArrivals")
   end
   local busses = P.get_values(json, "shortName")
   local headsigns = P.get_values(json, "headsign")
@@ -65,7 +66,9 @@ function P.parse_arrivals(json)
     for i = 1, math.min(5, #times) do
       local bus = P.pad_right((busses[i] or "?"), 5) --last num in padding tells width
 		  local headsign = P.pad_right(string.sub((headsigns[i] or "unknown"), 1, 12), 12)
-      local time_until = P.pad_left(P.to_mins(times[i] or "?"), 2)
+
+      local seconds = tonumber(times[i])
+      local time_until = seconds and P.pad_left(P.to_mins(seconds), 2) or " ?"
 
       table.insert(strings, bus .. headsign .. " " .. time_until)
     end
