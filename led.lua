@@ -1,9 +1,9 @@
 RED, GREEN, BLUE = 7, 5, 6
 local freq = 100
 
-pwm.setup(RED, freq, 1023)
-pwm.setup(GREEN, freq, 1023)
-pwm.setup(BLUE, freq, 1023)
+pwm.setup(RED, freq, 512)
+pwm.setup(GREEN, freq, 512)
+pwm.setup(BLUE, freq, 512)
 
 pwm.start(RED)
 pwm.start(GREEN)

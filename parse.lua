@@ -1,5 +1,11 @@
 local P = {}
 
+require("led")
+local id, sda, scl, sla = 0, 2, 1, 0x3C
+local u8g2 = require("u8g2")
+i2c.setup(id, sda, scl, i2c.SLOW)
+local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
+
 function P.pad_right(str, len, char)
   char = char or " "
   return str .. string.rep(char, math.max(0, len - P.utf8len(str)))
@@ -48,11 +54,6 @@ function P.get_values(json_text, search_term)
 end
 
 --display bus number, headsign, and minutes (max display width <=21chars)
-local id, sda, scl, sla = 0, 2, 1, 0x3C
-
-local u8g2 = require("u8g2")
-i2c.setup(id, sda, scl, i2c.SLOW)
-local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
 function P.arrival_display(json)
 
   disp:clearBuffer()
@@ -85,7 +86,6 @@ function P.arrival_display(json)
       local bus = P.pad_right((busses[i] or "?"), 5) --last num in padding tells width
 		  local headsign = P.pad_right(string.sub((headsigns[i] or "unknown"), 1, 12), 12)
       local time_until = P.pad_left(P.to_mins(times[i] or "?"), 2)
-
       local msg = bus .. " " .. headsign .. " " .. time_until
       disp:drawUTF8(0, y, msg)
       y = y + 10
