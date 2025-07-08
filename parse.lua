@@ -49,12 +49,12 @@ function P.get_values(json_text, search_term)
 end
 
 --display bus number, headsign, and minutes (max display width <=21chars)
-function P.arrival_display(json)
-  local id, sda, scl, sla = 0, 2, 1, 0x3C
+local id, sda, scl, sla = 0, 2, 1, 0x3C
 
-  local u8g2 = require("u8g2")
-  i2c.setup(id, sda, scl, i2c.SLOW)
-  local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
+local u8g2 = require("u8g2")
+i2c.setup(id, sda, scl, i2c.SLOW)
+local disp = u8g2.ssd1306_i2c_128x64_noname(id, sla)
+function P.arrival_display(json)
 
   disp:clearBuffer()
   disp:setFont(u8g2.font_6x10_tf)

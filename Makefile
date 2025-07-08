@@ -1,4 +1,4 @@
-PORT := /dev/cu.wchusbserial130
+PORT := /dev/cu.wchusbserial140
 BAUD := 115200
 
 # FIRMWARE  := firmware/nodemcu-release-17-modules-2025-07-03-14-55-19-float.bin
