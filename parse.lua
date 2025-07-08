@@ -1,6 +1,6 @@
 local P = {}
 
-require("led")
+
 local id, sda, scl, sla = 0, 2, 1, 0x3C
 local u8g2 = require("u8g2")
 i2c.setup(id, sda, scl, i2c.SLOW)
