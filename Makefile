@@ -1,47 +1,52 @@
 PORT := /dev/cu.wchusbserial140
 BAUD := 115200
+UPL := nodemcu-uploader --port $(PORT) --baud $(BAUD)
 
-FIRMWARE  := firmware/nodemcu-release-14-modules-2025-07-07-14-04-28-float.bin
+FIRMWARE := firmware/nodemcu-release-14-modules-2025-07-07-14-04-28-float.bin
 
 LUA := $(wildcard *.lua)
 GQL := $(wildcard *.gql)
 FILES := $(LUA) $(GQL)
 
-.PHONY: all upload fclean rm-init restart console flash
+.PHONY: re where upload upload-c rm-init format flash ls restart term
 
 all: re
 
 where:
 	ls /dev/cu.* /dev/tty.* 
 
-upload: 
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(FILES)
+upload:
+	@echo "Uploading .gql and .lua files"
+	@echo "Uploading files: $(FILES)"
+	@$(UPL) upload $(FILES)
 
 upload-c: 
-	@echo "Compiling & uploading: $(LUA)"
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(GQL)
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload --compile $(LUA)
+	@echo "Uploading .gql and compiled .lua"
+	@$(UPL) upload $(GQL)
+	@$(UPL) upload --compile $(LUA)
 
 rm-init:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove init.lua
+	@echo "Removing init.lua"
+	@$(UPL) file remove init.lua
+	@$(UPL) node restart
 
 format:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file format
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
+	@echo "Formatting..."
+	@$(UPL) file format
+	@$(UPL) file list
 
 flash:
-	@echo "Flashing firmware $(FIRMWARE) to $(PORT)."
+	@echo "Flashing firmware $(FIRMWARE) to $(PORT)"
 	esptool.py --port $(PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE)
 
-re:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file remove $(FILES)
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) upload $(FILES)
+re: format upload-c
 
 ls:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) file list
+	@$(UPL) file list
 
 restart:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) node restart
+	@echo "Restarting NodeMCU"
+	@$(UPL) node restart
 
-terminal:
-	nodemcu-uploader --port $(PORT) --baud $(BAUD) terminal
+term:
+	@$(UPL) terminal
