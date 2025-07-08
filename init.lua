@@ -1,7 +1,7 @@
 require("led")
 
 local IDLE_AT_STARTUP_MS = 5000
-local FETCH_INTERVAL_MS  = 10 * 1000
+local FETCH_INTERVAL_MS  = 60 * 1000
 
 local sntp = require("sntp")
 local hsl  = require("hsl")
@@ -13,11 +13,13 @@ local function wait_for_ip(on_ready)
     if not ip then
       print("Connecting…")
 	  led(512, 1023, 1023)
+	  led(1023, 1023, 1023)
       return
     end
     t:unregister()
-    print("Connected! IP address:", ip)
+    print("Connected!\nIP address:", ip)
 	led(512, 1023, 512)
+	led(1023, 1023, 1023)
     on_ready()
   end)
 end

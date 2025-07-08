@@ -1,4 +1,3 @@
--- Module table
 local P = {}
 
 function P.pad_right(str, len, char)
